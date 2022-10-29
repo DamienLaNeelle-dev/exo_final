@@ -57,7 +57,9 @@ function Users() {
             {users.map((user) => (
               <tr key={user.id}>
                 <th scope="row">{user.id}</th>
-                <td>{user.prenom}</td>
+                <td>
+                  <a href="http://127.0.0.1:8000/details/{id}">{user.prenom}</a>
+                </td>
                 <td>{user.nom}</td>
                 <td>{user.email}</td>
                 <td>{user.adresse}</td>

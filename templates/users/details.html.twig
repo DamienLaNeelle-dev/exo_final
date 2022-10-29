@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exo final - Users
+{% endblock %}
+
+{% block body %}
+	<div>page détail de l'utilisateur</div>
+	{% if users is defined %}
+		{% for user in users %}
+			<h1>{{ user.nom }}</h1>
+
+		{% endfor %}
+	{% endif %}
+{% endblock %}

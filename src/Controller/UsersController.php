@@ -2,19 +2,17 @@
 
 namespace App\Controller;
 
+use App\Repository\PossessionsRepository;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 
 
 class UsersController extends AbstractController
@@ -60,5 +58,52 @@ class UsersController extends AbstractController
 
         return $this->redirectToRoute('app_users');
     }
+
+    // #[Route('/possessions', name: 'app_usersPossessions')]
+    // public function index2(PossessionsRepository $possessionsRepository, UsersRepository $usersRepository): Response
+    // {
+
+    //     // $possessions = $possessionsRepository
+    //     // ->find($id);
+    //     // $users = $usersRepository
+    //     // ->find($id);
+
+    //     return $this->render('possessions/index.html.twig', [
+    //         'controller_name' => 'UsersController'
+    //     ]);
+    // }
+
+    #[Route('/details/{id}', name: 'app_details')]
+    public function details(UsersRepository $usersRepository, $id): Response
+    {
+        $users = $usersRepository->find($id);
+        // dd($users);
+        return $this->render('users/details.html.twig', [
+            'controller_name' => 'UsersController', 'users' => $users
+        ]);
+    }
+
+    // #[Route('/possessions/{id}', name:'app_possessions')]
+    // public function userPossessions(PossessionsRepository $possessionsRepository, UsersRepository $usersRepository, $id): Response
+    // {
+    //     $encoder = new JsonEncoder();
+    //     $defaultContext = [
+    //         AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
+    //             return $object->getNom();
+    //         },
+    //     ];
+
+    //     $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+    //     $serializer = new Serializer([$normalizer], [$encoder]);
+
+    //     $possessions = $possessionsRepository->find($id);
+    //     $jsonContent = $serializer->serialize($possessions, 'json');
+
+    //     $response = new Response;
+
+    //     $response->headers->set('Content-Type', 'application/json');
+    //     $response->headers->set('Access-Control-Allow-Origin', '*');
+    //     return new Response($jsonContent);
+    // }
 
 }
