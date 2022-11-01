@@ -4,6 +4,7 @@ function Users() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [users, setUsers] = useState([]);
+  const [isShow, setIsShow] = useState(true);
 
   useEffect(() => {
     fetchUsers();
@@ -34,6 +35,10 @@ function Users() {
     });
   };
 
+  const handleShow = () => {
+    setIsShow(!isShow);
+  };
+
   if (error) {
     return <div> Erreur : {error.message}</div>;
   } else if (!isLoaded) {
@@ -47,6 +52,7 @@ function Users() {
               <th scope="col">Id</th>
               <th scope="col">Prénom</th>
               <th scope="col">Nom</th>
+              <th scope="col">Âge</th>
               <th scope="col">email</th>
               <th scope="col">Adresse</th>
               <th scope="col">Tel</th>
@@ -58,9 +64,12 @@ function Users() {
               <tr key={user.id}>
                 <th scope="row">{user.id}</th>
                 <td>
-                  <a href="http://127.0.0.1:8000/details/{id}">{user.prenom}</a>
+                  <a href={`http://127.0.0.1:8000/details/${user.id}`}>
+                    {user.prenom}
+                  </a>
                 </td>
                 <td>{user.nom}</td>
+                <td>{user.age}</td>
                 <td>{user.email}</td>
                 <td>{user.adresse}</td>
                 <td>{user.tel}</td>

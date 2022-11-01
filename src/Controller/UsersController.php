@@ -2,18 +2,21 @@
 
 namespace App\Controller;
 
-use App\Repository\PossessionsRepository;
+use App\Service\UserService;
+use Doctrine\ORM\EntityManager;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
-
+use App\Repository\PossessionsRepository;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class UsersController extends AbstractController
 {
@@ -33,7 +36,7 @@ class UsersController extends AbstractController
 
         $encoder = new JsonEncoder();
         $defaultContext = [
-            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
                 return $object->getNom();
             },
         ];
@@ -49,8 +52,30 @@ class UsersController extends AbstractController
         return new Response($jsonContent);
     }
 
+    #[Route('/users', name: 'add_users')]
+    public function register(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
+    {
+
+        $userRegistered = $request->getContent();
+
+
+        try {
+            $user = $serializer->deserialize($userRegistered, User::class, 'json');
+            $em->persist($user);
+            $em->flush();
+            $response = $this->json($user, 201, []);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+            return $response;
+        } catch (NotEncodableValueException $e) {
+            return $this->json([
+                'status' => 400,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
     #[Route('/user/delete/{id}', name: 'delete_user')]
-    public function deleteUser(int $id, UsersRepository $usersRepository, EntityManagerInterface $em): Response 
+    public function deleteUser(int $id, UsersRepository $usersRepository, EntityManagerInterface $em): Response
     {
         $user = $usersRepository->findOneById($id);
         $em->remove($user);
@@ -59,33 +84,29 @@ class UsersController extends AbstractController
         return $this->redirectToRoute('app_users');
     }
 
-    // #[Route('/possessions', name: 'app_usersPossessions')]
-    // public function index2(PossessionsRepository $possessionsRepository, UsersRepository $usersRepository): Response
-    // {
 
-    //     // $possessions = $possessionsRepository
-    //     // ->find($id);
-    //     // $users = $usersRepository
-    //     // ->find($id);
 
-    //     return $this->render('possessions/index.html.twig', [
-    //         'controller_name' => 'UsersController'
-    //     ]);
-    // }
 
     #[Route('/details/{id}', name: 'app_details')]
-    public function details(UsersRepository $usersRepository, $id): Response
+    public function details(UsersRepository $usersRepository, PossessionsRepository $possessionsRepository, $id): Response
     {
-        $users = $usersRepository->find($id);
-        // dd($users);
+        $user = $usersRepository->find($id);
+        // dump($user);
+        $possessions = $possessionsRepository->findAll($id);
+        dump($possessions);
         return $this->render('users/details.html.twig', [
-            'controller_name' => 'UsersController', 'users' => $users
+            'user' => $user, 'possessions' => $possessions
         ]);
     }
 
-    // #[Route('/possessions/{id}', name:'app_possessions')]
-    // public function userPossessions(PossessionsRepository $possessionsRepository, UsersRepository $usersRepository, $id): Response
+    // #[Route('/', name:'add_user')]
+    // public function add_user(UsersRepository $usersRepository, Request $request, SerializerInterface $serializer, UserService $userService): Response
     // {
+    //     $jsonRecu = $request->getContent();
+    //     $user = $serializer->deserialize($jsonRecu, Users::class, 'json');
+
+    //     $usersRepository->save($user, true);
+
     //     $encoder = new JsonEncoder();
     //     $defaultContext = [
     //         AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context){
@@ -94,16 +115,23 @@ class UsersController extends AbstractController
     //     ];
 
     //     $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+
     //     $serializer = new Serializer([$normalizer], [$encoder]);
 
-    //     $possessions = $possessionsRepository->find($id);
-    //     $jsonContent = $serializer->serialize($possessions, 'json');
+    //     $users = $usersRepository->findAll();
+    //     foreach ($users as $user) {
+    //         $age = $userService->calcul($user->getBirthDate());
+    //         $user->setAge($age);
+    //     }
 
-    //     $response = new Response;
+    //     $serializedUsers = $serializer->serialize($users, 'json', []);
 
-    //     $response->headers->set('Content-Type', 'application/json');
-    //     $response->headers->set('Access-Control-Allow-Origin', '*');
-    //     return new Response($jsonContent);
+    //     return $this->json($serializedUsers, 201, [
+    //         'Content-Type' => 'application/json',
+    //         'Access-Controll-Allow-Origin' => '*'
+    //     ]);
+
     // }
+
 
 }

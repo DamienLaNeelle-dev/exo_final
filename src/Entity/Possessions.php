@@ -22,6 +22,7 @@ class Possessions
     #[ORM\Column(length: 40)]
     private ?string $type = null;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,4 +63,6 @@ class Possessions
 
         return $this;
     }
+
+
 }

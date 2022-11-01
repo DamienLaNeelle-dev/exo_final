@@ -1,7 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Exo final - Users{% endblock %}
+{% block title %}Exo final - Users
+{% endblock %}
 
 {% block body %}
-<h1 class="d-flex justify-content-center align-items-center">Users</h1>
+	<h1 class="d-flex justify-content-center align-items-center">Users</h1>
+	<div id="app"></div>
+	<a href="./users/form.html.twig"><button class="btn btn-success">
+	Ajouter un utilisateur
+	</button></a>
+{% endblock %}
+
+{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
 {% endblock %}

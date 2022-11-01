@@ -1,14 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Exo final - Users
+{% block title %}Exo final - Possessions
 {% endblock %}
 
 {% block body %}
-	<div>page détail de l'utilisateur</div>
-	{% if users is defined %}
-		{% for user in users %}
-			<h1>{{ user.nom }}</h1>
+	<h1 class="mb-5 d-flex justify-content-center">Possessions</h1>
 
-		{% endfor %}
-	{% endif %}
+			<div class="card mb-3" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{user.prenom}} {{user.nom}}</h5>
+    <p class="card-text">{{user.adresse}}</p>
+    <p class="card-text">{{user.tel}}</p>
+    <p class="card-text">{{user.email}}</p>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Valeur</th>
+      <th scope="col">Type</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for possessions in possessions %}
+    <tr>
+      <th scope="row">{{possessions.id}}</th>
+      <td>{{possessions.nom}}</td>
+      <td>{{possessions.valeur}}</td>
+      <td>{{possessions.type}}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}

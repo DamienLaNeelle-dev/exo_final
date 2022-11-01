@@ -30,23 +30,7 @@ class AppFixtures extends Fixture
     {
 
 
-        for ($i = 0; $i <= 10; $i++) {
-            $user = new Users();
-            $user->setPrenom($this->faker->firstname())
-                ->setNom($this->faker->lastname())
-                ->setEmail($this->faker->email())
-                ->setAdresse($this->faker->streetName())
-                ->setTel($this->faker->phoneNumber());
-            $manager->persist($user);
-        }
 
-        for ($i = 0; $i <= 10; $i++) {
-            $possessions = new Possessions();
-            $possessions->setNom($this->faker->word())
-                ->setValeur($this->faker->randomFloat(1, 20, 30))
-                ->setType($this->faker->word());
-            $manager->persist($possessions);
-        }
 
 
         $manager->flush();
