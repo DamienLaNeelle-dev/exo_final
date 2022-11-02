@@ -1,16 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Exo final - Users
+{% block title %}Exo final - Ajout utilisateur
 {% endblock %}
 
 {% block body %}
-	<h1 class="d-flex justify-content-center align-items-center">Users</h1>
-	<div id="app"></div>
-	{# <a class="btn btn-success" href="http://127.0.0.1:8000/addUser">Ajouter un utilisateur</a> #}
-	<button href="#" class="btn btn-success" role="button" data-bs-target="#modal" data-bs-toggle="modal">
-	Ajouter un utilisateur</button>
-
-	<div id="modal" class="modal" tabindex="-1">
+	{# <div id="modal "class="modal" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -18,8 +12,6 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-
-				{# <div>hello world</div> #}
 					{{ form_start(form) }}
 
 					<div class="form-group">
@@ -72,17 +64,62 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> #}
 
+	{# <div class="container">
+		<h1 class="d-flex justify-content-center mt-3">Ajout d'un utilisateur</h1>
+		{{ form_start(form) }}
 
-	
-	
+		<div class="form-group">
+			{{ form_label(form.prenom) }}
+			{{ form_widget(form.prenom) }}
+			<div class="form-error">
+				{{ form_errors(form.prenom) }}
+
+			</div>
+			<div class="form-group">
+				{{ form_label(form.nom) }}
+				{{ form_widget(form.nom) }}
+				<div class="form-error">
+					{{ form_errors(form.nom) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(form.email) }}
+				{{ form_widget(form.email) }}
+				<div class="form-error">
+					{{ form_errors(form.email) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(form.adresse) }}
+				{{ form_widget(form.adresse) }}
+				<div class="form-error">
+					{{ form_errors(form.adresse) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(form.tel) }}
+				{{ form_widget(form.tel) }}
+				<div class="form-error">
+					{{ form_errors(form.tel) }}
+				</div>
+			</div>
+			<div class="form-group">
+				{{ form_label(form.birthDate) }}
+				{{ form_widget(form.birthDate) }}
+				<div class="form-error">
+					{{ form_errors(form.birthDate) }}
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			{{ form_row(form.submit) }}
+		</div>
+		{{ form_end(form) }}
+	</div> #}
 {% endblock %}
-
-{% block javascripts %}
-	{{ encore_entry_script_tags('app') }}
-	
-	{% endblock %}
